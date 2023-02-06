@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div class="app">
+        <input type="text"  v-model="age"/>  
+        <h1 v-once>저는 {{ age }}입니다.</h1>
+        <h1>저는 {{ age }}입니다.</h1>
+        <p v-bind="속성객체" >{{ aboutMe }}</p>    <!-----v-bind생략가능 :만함-->
+        <div v-html="content"></div>
+        <button v-bind:disabled="여부">확인버튼</button>
+        <a href ="" v-on:click.prevent="addAge">나이증가</a>
+    </div>
+
+    
+    <script>
+        const instance = Vue.createApp({
+            data() {
+                return {
+                    속성객체: {
+                        title:'안녕',
+                        id:'eulsoo',
+                        class:'eulsoo',
+                        style:'color:red'
+                    },
+                    여부: false,
+                    age : 10,
+                    att : 'title',
+                    text: '오늘은 미먼 최고다',
+                    src: '../img/a.png',
+                    content: '<strong>문열지마!</strong>'
+                    
+                }
+            },
+            computed: {
+                aboutMe() {
+                    return `저의 나이는 ${this.age}입니다.`;
+                }
+            },
+            methods: {
+                addAge() {
+                    this.age++
+                }
+            },
+            breforeCreated() {},
+            mounted() {
+                console.log('마운트 된 후!')
+            }
+
+        })
+        console.log(instance)
+        instance.mount('#app');
+    </script>
+    
+</body>
+</html>
