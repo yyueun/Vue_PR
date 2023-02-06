@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        #app{
+            border:2px solid red;
+            display: flex;
+        }
+        .text{
+            width:150px;
+            height: 150px; 
+            border:2px solid black;
+            margin:10px;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p class="text" @:click="clickedText($event,'red')">첫번째 글입니다.</p>
+        <p class="text" @:click="clickedText($event,'green')">두번째 글입니다.</p>
+        <p class="text" @:click="clickedText($event,'blue')">세번째 글입니다.</p>
+    </div>
+    <script>
+        Vue.createApp({
+            data(){
+                return {
+        
+            };
+            },
+            methods:{
+                clickedText(event,color){
+                    console.log(event.target)
+                    event.target.style.borderColor = color
+                    
+                }
+            }
+        }).mount('#app');
+        
+    </script>
+</body>
+</html>
