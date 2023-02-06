@@ -16,7 +16,7 @@
 
     </div>
     <br><br><br><br>
-    <input type="text" v-on:keyup.enter="setName($event)"/>
+    <input type="text" v-on:keyup.ctrl.enter="setName($event)"/> <!---ctrl+enter눌럿을 때만 나옴--->
     <p>{{myName}}</p>
     </div>
     <script>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>뷰 이벤트</h1>
+        <h2>이벤트로 할일</h2>
+        <button v-on:click="increase(4)">더하기</button>
+        <button v-on:click="decrease(4)">빼기</button>
+        <p>결과: {{ counter }}</p>
+        <input type="text" v-model="myName" />
+        <!---- <p>{{ showName() }}</p> 이벤트 트리거없이 자동실행되면 렌더링될때 매번 실행됨..!-->
+        <!---{{ '정' + myName}}</p> 메서드보다는 이걸 써야하는데 이 식이 복잡해지면 computed를 사용해야함-->
+    </div>
+    <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          counter: 10,
+          myName: '',
+        };
+      },
+      computed:{
+        showName(){
+            console.log('실행됐음');
+            if(this.myName==='') return '';
+            return '정'+this.myName
+        }
+      },
+      watch:{
+        myName(newData,oldData){ //파라미터 두 개 받음;; 데이터 지켜보다가 원하는 값이 됐을 때, 무언가를 실행.
+            if (newData ==='을수'){
+                console.log("OK")
+            }
+        }
+      },
+
+      methods: {
+        showName() {
+          console.log('실행됐음!');
+          if (this.myName === '') return '';
+          return '정' + this.myName;
+        },
+        setName(event) {
+          this.myName = event.target.value;
+        },
+        increase(num) {
+          this.counter += num;
+        },
+        decrease(num) {
+          this.counter -= num;
+        },
+      }
+    }).mount('#app');
+     
+    </script>
+</body>
+</html>
