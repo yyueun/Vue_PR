@@ -9,25 +9,43 @@
 </head>
 <body>
     <div id='app'>
-        <input type ='text' 
-        v-model ="name"/> 
-        <h1>{{ name }}의 소개</h1>
+        <button @:click="subNum($event, 10)">감소</button> <!-----v-on은 @로 대체 가능; (10)파라미터 설정함 10씩 증가-->
+        <button v-on:click="addNum(10)">증가</button>
+    <div @:click="subNum(20)">
+        <p @:click.stop="some">결과:{{number}}</p>
+
+    </div>
+    <br><br><br><br>
+    <input type="text" v-on:keyup.enter="setName($event)"/>
+    <p>{{myName}}</p>
     </div>
     <script>
         Vue.createApp({
             data() {
                 return{
-                    name:'김윤f'
+                    myNum: 13,
+                    number: 100,
+                    myName: ''
 
                 }
             },
             methods:{
-                setName(event){
-                    console.log(event.target.value) 
-                    this.name = event.target.value; <!--this의 이름에다가 이벤트 타겟 값 넣기---->
+                setName(ev){
+                    this.myName = ev.target.value;           
+                },
+                some(){
+                    console.log('some')
+                },
+                addNum(num){
+                    this.number +=num; //위에서 파라미터 설정해서 10씩 증가하도록 만듦
 
 
+                },
+                subNum(ev,num){
+                    this.number-=num; 
+                    console.log(ev.target)
                 }
+              
             }
         }).mount('#app')
     </script>
