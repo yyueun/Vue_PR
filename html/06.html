@@ -11,15 +11,15 @@
             border:2px solid red;
             display: flex;
         }
-        .text{
+        .text {
             width:150px;
             height: 150px; 
-            border:2px solid rgba;
+            border:2px solid black;
             margin:10px;
             
 
         }
-        .on{
+        .on {
             border-color :red;
             
         }
@@ -28,9 +28,9 @@
 
 <body>
     <div id="app">
-      <p class="text1 ? 'text on':'text"   @:click="clickedText('red')">첫번째 글입니다.</p>
-      <p class="text2 ? 'text on':'text " @:click="clickedText('blue')">두번째 글입니다.</p>
-      <p class="text3 ? 'text on':'text"  @:click="clickedText('green')">세번째 글입니다.</p>
+      <p :class="{text:true, on:text1}"   @:click="clickedText('red')">첫번째 글입니다.</p>
+      <p :class="{text:true, on:text2}" @:click="clickedText('blue')">두번째 글입니다.</p>
+      <p :class="{text:true, on:text1}"  @:click="clickedText('green')">세번째 글입니다.</p>
     </div>
 
     <script>
