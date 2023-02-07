@@ -1,4 +1,4 @@
-//칼로리 계산
+<!--연습문제: 칼로리 계산-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +18,12 @@
     <div v-else>
         <h2>칼로리 기록</h2>
         <ul>
-        <li>{{ myKcal[0].date }}: {{ myKcal[0].value+'kcal' }}</li>
+            <!-----반복문-->
+        <!---<li v-for="item in myKcal" >{{ item.date }}: {{ item.value+'kcal' }}</li>--->
+         <li v-for="(item,i) in myKcal" :key="item.date">{{ myKcal[i].date }}: {{ myKcal[i].value+'kcal' }}
+        
+            <a href="" @click.prevent="del(i)">삭제</a> <!---위의 i값을 del에 넘겨줌-->
+         </li>
         </ul>
     </div>
 </div>
@@ -27,7 +32,11 @@
             data(){
                 return{
                     inputValue:'',
-                    myKcal:[],
+                    myKcal:[
+                        {date:'2023-02-07', value:555},
+                        {date:'2023-02-08', value:444},
+                        {date:'2023-02-10', value:333},
+                    ],
                 };
             },
             methods:{
@@ -40,6 +49,11 @@
                     date:`${year}-${month}-${day}`, value: this.inputValue
                     })
                     this.inputValue=''
+                },
+                del(index){
+                    this.myKcal.splice(index,1)
+
+
                 }
 
             }
