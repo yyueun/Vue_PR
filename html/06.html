@@ -1,59 +1,32 @@
+<!---조건부 렌더링---->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/vue@3"></script>
-    <style>
-        #app{
-            border:2px solid red;
-            display: flex;
-        }
-        .text {
-            width:150px;
-            height: 150px; 
-            border:2px solid black;
-            margin:10px;
-            
-
-        }
-        .red{border-color : red;}
-        .green{border-color: green;}
-        .blue{border-color:blue;}
-    </style>
 </head>
-
 <body>
-    <div id="app">
-      <p class="text" :class="text1CSS"   @click="clickedText('red')">첫번째 글입니다.</p>
-      <p class="text" :class="text2CSS" @click="clickedText('blue')">두번째 글입니다.</p>
-      <p class="text" :class="text3CSS"  @click="clickedText('green')">세번째 글입니다.</p>
+    <div id ='app'>
+        <p v-if="state ===='a'">안녕하세요.a</p>
+        <p v-else-if="state ===='b'">네?</p>
+        <p v-else-if="state ==='c'">고맙습니다.</p>
+        <p v-else>감삼당.</p>
+        
+        <!---<p v-show="state ==='a'">안녕하소</p>  -->
     </div>
-
     <script>
-      Vue.createApp({
-        data(){
-          return {
-            text1: false,
-            text2: false,
-            text3: false,
-          }
-        },
-        computed:{
-            text1CSS() {return {red:this.text1}}, //
-            text2CSS() {return {blue:this.text2}},
-            text3CSS() {return {green:this.text3}},
-        },
-        methods: {
-          clickedText(color) {  ///토글로 바꾸기
-            if (color === 'red') this.text1 = !this.text1; //true할당됨
-            if (color === 'blue') this.text2 = !this.text2;
-            if (color === 'green') this.text3 = !this.text3;
-          }
-        }
-      }).mount('#app');
+        Vue.createApp({
+            data(){
+                return {
+                    state:'k'
+
+                }
+            },
+        }).mount('#app')
     </script>
+    
 </body>
 </html>
