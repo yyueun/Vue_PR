@@ -19,18 +19,17 @@
             
 
         }
-        .on {
-            border-color :red;
-            
-        }
+        .red{border-color : red;}
+        .green{border-color: green;}
+        .blue{border-color:blue;}
     </style>
 </head>
 
 <body>
     <div id="app">
-      <p :class="text" class="{on:text1}"   @:click="clickedText('red')">첫번째 글입니다.</p>
-      <p :class="text" class="{on:text1}" @:click="clickedText('blue')">두번째 글입니다.</p>
-      <p :class="text" class="{on:text1}"  @:click="clickedText('green')">세번째 글입니다.</p>
+      <p class="text" :class="text1CSS"   @click="clickedText('red')">첫번째 글입니다.</p>
+      <p class="text" :class="text2CSS" @click="clickedText('blue')">두번째 글입니다.</p>
+      <p class="text" :class="text3CSS"  @click="clickedText('green')">세번째 글입니다.</p>
     </div>
 
     <script>
@@ -42,11 +41,16 @@
             text3: false,
           }
         },
+        computed:{
+            text1CSS() {return {red:this.text1}}, //
+            text2CSS() {return {blue:this.text2}},
+            text3CSS() {return {green:this.text3}},
+        },
         methods: {
-          clickedText(color) {
-            if (color === 'red') this.text1 = true;
-            if (color === 'blue') this.text2 = true;
-            if (color === 'green') this.text3 = true;
+          clickedText(color) {  ///토글로 바꾸기
+            if (color === 'red') this.text1 = !this.text1; //true할당됨
+            if (color === 'blue') this.text2 = !this.text2;
+            if (color === 'green') this.text3 = !this.text3;
           }
         }
       }).mount('#app');
