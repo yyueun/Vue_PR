@@ -28,9 +28,9 @@
 
 <body>
     <div id="app">
-      <p :class="{text:true, on:text1}"   @:click="clickedText('red')">첫번째 글입니다.</p>
-      <p :class="{text:true, on:text2}" @:click="clickedText('blue')">두번째 글입니다.</p>
-      <p :class="{text:true, on:text1}"  @:click="clickedText('green')">세번째 글입니다.</p>
+      <p :class="text" class="{on:text1}"   @:click="clickedText('red')">첫번째 글입니다.</p>
+      <p :class="text" class="{on:text1}" @:click="clickedText('blue')">두번째 글입니다.</p>
+      <p :class="text" class="{on:text1}"  @:click="clickedText('green')">세번째 글입니다.</p>
     </div>
 
     <script>
