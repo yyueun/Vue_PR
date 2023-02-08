@@ -1,0 +1,144 @@
+<!-- 2023.02.08 PR3 -->
+<!-- emit() 소리치는 도구 -->
+<!-- 부모 -> 자식 porps이용 (땡겨쓰기) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        * {margin:0; padding:0}
+        li {list-style: none;}
+        body {padding:30px;}
+        .list {margin:20px 0; display: flex;}
+        .list > li {margin:5px; width:200px; border:1px solid gray; padding:10px;}
+        .list > li > * {display:block}
+        .list > li > img {width:200px; margin-bottom:20px;}
+        .list > li > strong {font-size:20px; color:#666; margin-bottom:10px}
+        .list > li > span{margin-bottom:10px;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Sales Product({{inCartSum}}) - {{totalPrice}}원</h1>
+
+        <!---chips-data는 나니아에서 사용할 이름 , chips는 현실세계에서의 이름-->
+        <!-- chips랑 바인딩해야해서 앞에 :붙임 -->
+        <product-list
+         :chips-data="chips"
+         like = "10"
+
+         @add-item= "addWork"
+         ></product-list>
+         <cart-list :chips-data="chips" :buy-data="buyList"> </cart-list>
+        
+            <!---전역 component  이름 -(케밥케이스)이걸 이용해서 써야함-->
+        
+    </div>
+    <script>
+        //객체생성
+        const cartList ={
+            template:`
+            <ul class ="list_">
+            <li v-for="(item,i) in buyData"></li>
+            <span>{{item[i]}}</span> 
+            <button @click="del(i)">삭제</button>
+            </li>
+            </ul>`,
+            data(){
+                return {}
+            },
+            props:['chipsData','buyData']
+
+        }
+
+
+        const productList = {
+            template: `
+            <ul class="list">
+            <li v-for="(item,i) in chipsData" :key="item.title" >
+                <img :src="item.img" />
+                <strong>{{ item.title }}</strong>
+                <span>{{ item.desc }}</span>
+                <b>{{ item.price }}</b>
+                <button @click="add(i)">구입하기</button>
+
+            </li>
+            </ul>
+            `,
+            //<button @click="$emit('add-item',20)">add item</button>
+            data(){
+                return{
+                    k :this.like //재할당 할 수 없으니 새로 만들어서 넣고 수정해서 사용함
+                }
+                
+            },
+            props:['chipsData','like'], //위의 product-list와 연결하기 위함. <product-list :chips-data="chips"></product-list>
+            // 현실세계꺼를 나니아로 땡기기
+            methods: {
+                a(){
+                    this.k =20;
+                },
+                add(i){    
+                    this.$emit('add-item',i)},
+
+                    
+                    
+                }
+                    
+                }
+            
+         //root 인스턴스
+        const app = Vue.createApp({
+            data(){
+
+                return{
+                    inCartSum:0,
+                    totalPrice:0, //가격합
+                    buyList:[],
+                    chips:[{
+                    img:`images/mango.jpg`,
+                    title:`자연그대로 망고칩`,
+                    desc:`단맛이 그대로 살아있는 망고칩입니다.`,
+                    price:`2500`
+                },
+                {
+                    img:`images/apple.jpg`,
+                    title:`천연 오가닉 사과칩`,
+                    desc:`깨끗한 재료를 엄선하여 자연을 그대로 담았습니다.`,
+                    price:`2000`
+                },
+                {
+                    img:`images/jujube.jpg`,
+                    title:`아이깨끗 대추칩`,
+                    desc:`새콤함이 살아있는 반건조 대추그대로.`,
+                    price:`3000`
+                }
+            ]
+
+                }
+            },
+
+    //product-list 라는 태그를 쓸건데, 옵션으로 procuctList 를 매칭해서 쓸것임->지역컴포넌트
+            components: {'product-list': productList,cartList},
+            methods:{
+                addWork(index){
+                    this.inCartSum ++;
+                    this.totalPrice += Number(this.chips[index].price);
+                    //타이틀과 가격이 하나의 객체?로 만들어서 배열로 넣기 
+                    //구입누를때마다 리스트로 보이게 끔
+                    this.buyList.push(this.chips[index]) 
+                }
+              
+            }
+//components: {'product-list': productList} 키,밸류 값이 같다면 components: {productList}라 쓸 수 있음
+        })
+
+        app.mount('#app') //전역컴퍼넌트 이후에 mount해야함 
+    </script>
+    
+</body>
+</html>

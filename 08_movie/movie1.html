@@ -17,12 +17,12 @@
 <body>
   <div class="movie" id="app">
           <!---탭추가-->
-    <ul class="tab">
-      <li class="on"><a href="">예매순</a></li>
-      <li><a href="">평점순</a></li>
-      <li><a href="">개봉일순</a></li>
-      <li><a href="">주말관객순</a></li>
-      <li><a href="">다운로드순</a></li>
+    <ul class="tab" @click.prevent="setContext"> <!---클릭 감지기를 여기에 걸기-->
+      <li :class="order.ticketing"><a href="">예매순</a></li>
+      <li :class="order.score"><a href="">평점순</a></li>
+      <li :class="order.openDate"><a href="">개봉일순</a></li>
+      <li :class="order.week"><a href="">주말관객순</a></li>
+      <li :class="order.sale"> <a href="">다운로드순</a></li>
     </ul>
     <ol class="list">
       <li v-for="(movie, i) in movies">
@@ -31,30 +31,33 @@
             <span :class="['hide', 'rate', 'rate' + movie.rate[0]]">{{ movie.rate[1] }}</span>
             <strong class="rank">{{ i + 1 }}</strong>
             <img class="poster" :src="movie.src" :alt="movie.name"/>
-            <!-- -평점순
-            <span class="desc">
+            <!---v-if처리 movContext-->
+
+            <!--평점순--->
+            <span class="desc" v-if="movContext === 'score'">
                 <i class="star"><b :style=" 'width:' + (movie.score * 10) +'%'"></b></i>
                 <em class="score">{{ movie.score }}</em>
-            </span> -->
-            <!-- -예매순
-            <span class="desc">
-              <i class="reserv title">예매율</i>
-              <em class="reserv data">9292827</em>
-            </span> -->
-            <!-- -개봉일순
-            <span class="desc">
-              <em class="open data">9.11<b>개봉</b></em>
-            </span> -->
-            <!---주말관객순-->
-            <span class="desc">
-              <i class="week title">주말관객</i>
-              <em class="week data">225명</em>
             </span>
-            <!-- -판매율순
-            <span class="desc">
+            <!----예매율순-->
+            <span class="desc" v-else-if="movContext === 'ticketing'">
+              <i class="reserv title">예매율</i>
+              <em class="reserv data">{{movie.ticketing}}</em>
+            </span>
+            <!-- -개봉일순-->
+            <span class="desc" v-else-if="movContext === 'openDate'">
+              <em class="open data">{{movie.openDate}}<b>개봉</b></em>
+            </span> 
+
+            <!---주말관객순-->
+            <span class="desc" v-else-if="movContext === 'week'">
+              <i class="week title">주말관객</i>
+              <em class="week data">{{movie.week}}</em>
+            </span>
+            <!-- -판매율순--->
+            <span class="desc" v-else-if="movContext === 'sale'">
               <i class="sale title">판매율</i>
-              <em class="sale data">23% </em>
-            </span> -->
+              <em class="sale data">{{movie.sale}} </em>
+            </span> 
           </a>
       </li>
     </ol>
@@ -68,6 +71,16 @@
     Vue.createApp({
       data() {
         return {
+          movContext:'ticketing', //메인 상태값---
+          // order :{
+          //   ticketing:'on',
+          //   score:'',
+          //   openDate:'',
+          //   sale:'',
+          //   week:'',
+          // },
+
+          
           rateMatch: {
             '0': '전체관람가',
             '12': '12세이상 관람가',
@@ -82,7 +95,7 @@
               rate: 20, //[12, '12세이상 관람가'],
               score: 9.43, //평점
               sale: 11.7,  //판매율
-              openDate: 8.26,  //개봉일
+              openDate: 8.26,  //개봉일F
               ticketing: 11.79, //예매율
               week: 8777, //주말관객
             },
@@ -159,14 +172,60 @@
           ]
         }
       },
+      watch:{
+        movContext(newCxt){
+         // 개봉일순,주말관객순,다운로드순
+          if (newCxt ==='score') {this.setOrder('ticketing')};
+          else if (newCxt === 'openDate') {this.setOrder("openDate")};
+          else if (newCxt ==="week"){this.setOrder("week")}
+           
+          elseif (newCxt ==="sale"){this.setOrder("sale")}
+           
+          elseif (newCtx ==="ticketing"){this.setOrder("ticketing")}
+          
+        }
+      },
+      methods: {
+        setOrder(cxt){
+          this.movies.sort((a,b) => b[cxt] - a[cxt]) //괄호로 감싸면 변수처리 가능
+        },
+        setContext(ev){ //상태바꾸기  --- 위의 상단 탭 색깔 바꾸기 )
+          if(ev.target.tagName !== 'A') return; //걸러내기
+          this.movContext = ev.target.textContent;
+          thissetCrrTab(ev.target.parentNode) //덤 일 (li만 들어감)
+          
+
+        },
+        setCrrTab(lielem){
+          //li 가져와서  on 지우기
+          this.$refs.tab.querySelectorAll('li').forEach(item => {
+            item.classList.remove('on');
+          })
+          lielem.classList.add('on')
+           
+          //lielem에 on 주기 
+          //on만 주는 일
+          //ev.target을 받아와서 setCrrTab일을 할 수 있도록
+        }
+      },
+      
       created() {
         // rate 데이터 손보기
         for (const movie of this.movies) {
           movie.rate = [movie.rate, this.rateMatch[movie.rate]]
         }
         // score 순으로 소팅
-        this.movies.sort((a, b) => b.score - a.score);
-        console.log(this.movies)
+        this.setOrder('score')
+        // this.movies.sort((a, b) => b.score - a.score);
+        // console.log(this.movies)
+      },
+      mounted(){
+        this.$refs.tab.querySelectorAll('li').forEach(item=>{
+          if (item.firstChild.textcontent ==this.movContext){//firstChild 는 a
+              this.setCrrTab(item)
+
+          }  
+        })
       }
     }).mount('#app')
 

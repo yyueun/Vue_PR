@@ -1,5 +1,3 @@
-<!----영화페이지 전체 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,6 +62,13 @@
       data() {
         return {
           movContext: '예매순',
+          menuMatch: {
+            예매순: 'ticketing',
+            평점순: 'score',
+            개봉일순: 'openDate',
+            주말관객순: 'week',
+            다운로드순: 'sale',
+          },
           rateMatch: {
             '0': '전체관람가',
             '12': '12세이상 관람가',
@@ -156,47 +161,41 @@
         }
       },
       watch: {
-        movContext(newCxt) {
-          if (newCxt === '예매순') {this.setOrder('ticketing')}
-          else if (newCxt === '평점순') {this.setOrder('score')}
-          else if (newCxt === '개봉일순') {this.setOrder('openDate')}
-          else if (newCxt === '주말관객순') {this.setOrder('week')}
-          else if (newCxt === '다운로드순') {this.setOrder('sale')}
+        movContext(crr) {
+          this.setOrder(this.menuMatch[crr]);
+          this.setCrrTab(crr);
         }
       },
       methods: {
-        setOrder(cxt) {
+        setOrder(cxt) { // 소팅
           this.movies.sort((a, b) => b[cxt] - a[cxt])
         },
         setContext(ev) { // 상태바꾸기
           if (ev.target.tagName !== 'A') return;
           this.movContext = ev.target.textContent;
-          this.setCrrTab(ev.target.parentNode)
         },
-        setCrrTab(liElem) {
+        setCrrTab(crr) {
           // on 지우기
           this.$refs.tab.querySelectorAll('li').forEach(item => {
             item.classList.remove('on');
           })
           //lielem에 on 주기
-          liElem.classList.add('on')
+          this.$refs.tab.querySelectorAll('a').forEach(item => {
+            if (item.textContent === crr) {
+              item.parentNode.classList.add('on');
+            }
+          })
         }
       },
-      created() {
+      mounted() {
+        // 시작시 탭에 on주기
+        this.setCrrTab(this.movContext)
         // rate 데이터 손보기
         for (const movie of this.movies) {
           movie.rate = [movie.rate, this.rateMatch[movie.rate]]
         }
-        // score 순으로 소팅
-        this.setOrder('score')
-      },
-      mounted() {
-        // 시작시 탭에 on주기
-        this.$refs.tab.querySelectorAll('li').forEach(item => {
-          if (item.firstChild.textContent === this.movContext) {
-            this.setCrrTab(item)
-          }
-        })
+        // 시작시 소팅
+        this.setOrder(this.movContext)
       }
     }).mount('#app')
 
@@ -204,4 +203,4 @@
     
   </script>
 </body>
-</html>
+</html>s

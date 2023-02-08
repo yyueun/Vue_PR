@@ -1,0 +1,97 @@
+<!-- 2023.02.08 PR2 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        * {margin:0; padding:0}
+        li {list-style: none;}
+        body {padding:30px;}
+        .list {margin:20px 0; display: flex;}
+        .list > li {margin:5px; width:200px; border:1px solid gray; padding:10px;}
+        .list > li > * {display:block}
+        .list > li > img {width:200px; margin-bottom:20px;}
+        .list > li > strong {font-size:20px; color:#666; margin-bottom:10px}
+        .list > li > span{margin-bottom:10px;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Sales Product</h1>
+        
+            <product-list></product-list> <!---전역 component  이름 -(케밥케이스)이걸 이용해서 써야함-->
+        
+    </div>
+    <script>
+        //객체생성
+        const productList = {
+            template: `
+            <ul class="list">
+            <li v-for="item in chips" :key="item.title" >
+                <img :src="item.img" />
+                <strong>{{ item.title }}</strong>
+                <span>{{ item.desc }}</span>
+                <b>{{ item.price }}</b>
+            </li>
+            </ul>
+            `,
+            data(){ //나니아에 data 항목 등록
+                return{
+
+                    chips:[{
+                    img:`images/mango.jpg`,
+                    title:`자연그대로 망고칩`,
+                    desc:`단맛이 그대로 살아있는 망고칩입니다.`,
+                    price:`2,500원`
+                },
+                {
+                    img:`images/apple.jpg`,
+                    title:`천연 오가닉 사과칩`,
+                    desc:`깨끗한 재료를 엄선하여 자연을 그대로 담았습니다.`,
+                    price:`2,000원`
+                },
+                {
+                    img:`images/jujube.jpg`,
+                    title:`아이깨끗 대추칩`,
+                    desc:`새콤함이 살아있는 반건조 대추그대로.`,
+                    price:`3,000원`
+                }
+            ]
+                }
+            }
+        }
+
+         //root 인스턴스
+        const app = Vue.createApp({
+            data(){
+                return{
+
+                }
+            },
+    //product-list 라는 태그를 쓸건데, 옵션으로 procuctList 를 매칭해서 쓸것임->지역컴포넌트
+            components: {'product-list': productList}
+
+//components: {'product-list': productList} 키,밸류 값이 같다면 components: {productList}라 쓸 수 있음
+        })
+        //전역 component 1.이름적어주기 2.옵션넣기
+        // app.component('product-list',{ //component 인스턴스
+        //     template: `
+        //     <li>
+        //      <img src="images/mango.jpg" />
+        //         <strong>천연 오가닉 사과칩</strong>
+        //         <span>깨끗한 재료를 엄선하여 자연을 그대로 담았습니다.</span>
+        //         <b>2,000원</b>
+        //     </li>
+            
+        //     `,
+        // });
+        app.mount('#app') //전역컴퍼넌트 이후에 mount해야함 
+    </script>
+    
+</body>
+</html>
